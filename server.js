@@ -1,19 +1,26 @@
-const express = require('express')
-const cors = require('cors')
+const express = require('express');
 const app = express();
+const cors = require('cors');
+const colors = require('colors');
 
+// Setting
+
+const options = {
+  origin: "http://localhost:3000"
+};
+
+const PORT = process.env.PORT || 5000;
+
+// Middleware
+// Para poder rellenar el req.body
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 
-app.use('/', require('./routes/adminUser'));
+// Rutas
+app.use('/api', require('./app/routes/routes.js'));
 
-
-app.listen(4000, () => {
-
-    try {
-        console.log('SERVIDOR CORRIENDO PUERTO 4000 IN http://localhost:4000')
-    } catch (error) {
-        console.log('SE HA PRODUCIDO UN ERROR', error)
-    }
-})
+// Arrancamos el servidor
+app.listen(PORT, function () {
+    console.log(`Servidor iniciado en el puerto ${PORT}`.green);
+});

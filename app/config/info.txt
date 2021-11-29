@@ -1,0 +1,29 @@
+caso {
+    id
+    nombre
+    apellido
+    cedula
+    sexo
+    fecha_nacimiento
+    dir_residencia
+        res_lat
+        res_lng
+    dir_trabajo
+        tra_lan
+        tra_lng
+    resultado
+    fecha_examen
+
+    estado
+    fecha_modificacion
+}
+
+const estados = {
+    0: "En tratamiento en casa",
+    1: "En tratamiento hospital",
+    2: "En UCI",
+    3: "Curado",
+    4: "Muerte"
+}
+
+const direccion = `${dir}, Barranquilla, Colombia.`
