@@ -26,4 +26,112 @@ const estados = {
     4: "Muerte"
 }
 
+----------------------------------------------------------------------------
+SELECT fecha_examen, Count(*) as cantidad_casos
+FROM casos
+WHERE fecha_examen BETWEEN fecha_inicio AND fecha_fin
+GROUP BY fecha_examen
+ORDER BY fecha_examen DESC
+
+fechas = []
+casos = []
+resultados.forEach((result) => {
+    fechas.push(result.fecha);
+    casos.push(result.cantidad_casos);
+})
+
+res.status(200).json(
+    fechas: fechas,
+    casos: casos
+)
+--------------------------------------------------------------------------------
+SELECT fecha_examen, Count(*) as cantidad_casos
+FROM casos
+WHERE fecha_examen BETWEEN fecha_inicio AND fecha_fin AND estado = 'Muerte'
+GROUP BY fecha_examen
+ORDER BY fecha_examen DESC
+
+fechas = []
+casos = []
+resultados.forEach((result) => {
+    fechas.push(result.fecha);
+    casos.push(result.cantidad_casos);
+})
+
+res.status(200).json(
+    fechas: fechas,
+    casos: casos
+)
+
+--------------------------------------------------------
+
+SELECT Count(*) as cantidad_total
+FROM casos
+WHERE estado = 'Curado' or estado = 'Muerte'
+GROUP estado
+
+SELECT Count(*) as total_infectados
+FROM casos 
+WHERE resultado = 'Positivo'
+
+SELECT Count(*) as total
+FROM casos
+GROUP BY cedula
+
+infectados, muertes, curados
+
 const direccion = `${dir}, Barranquilla, Colombia.`
+
+
+pedro infectados
+pedro muertes
+pedro curado
+
+-------------------------------------
+SELECT Count(*) as cantidad_total
+FROM casos
+WHERE estado = 'Tratamiento en casa' or estado = 'Tratamiento en hospital' or estado = 'UCI' or estado = 'Muerte'
+GROUP BY estado
+
+SELECT COUNT(*) as cantidad_positivos
+FROM (
+    SELECT Count(*)
+    FROM casos
+    WHERE resultado = 'Positivo'
+    GROUP BY cedula
+)
+
+SELECT COUNT(*) as cantidad_negativos
+FROM (
+    SELECT Count(*)
+    FROM casos
+    WHERE resultado = 'Negativo'
+    GROUP BY cedula
+)
+
+SELECT COUNT(*) as cantidad_negativos
+FROM (
+    SELECT Count(*)
+    FROM casos
+    GROUP BY resultado
+)
+
+pos = []
+neg = []
+total = []
+resultados.forEach((result) => {
+    if (!total.includes(result.cedula)){
+        total.push(result.cedula);
+        if (result.estado = 'Positivo'){
+            pos.push(result.estado);
+        } else {
+            neg.pus(result.estado);
+        }
+    }
+})
+
+{
+    cantidad_positivos: pos.ength,
+    cantidad_negativos: neg.length,
+    cantidad_total: total.length
+}
