@@ -3,25 +3,28 @@ const db = require('../config/covid.db');
 module.exports = {
 
     async create(req, res) {
-        const { nombre, apellido, cedula, rol, usuario, contraseña } = req.body;
+        console.log(req.body)
+        const { nombre, apellido, cedula, sexo, fecha_nacimiento, dir_residencia, res_lat, res_lng, dir_trabajo, tra_lat, tra_lng, resultado, fecha_examen, estado } = req.body;
 
+        const current_date = String((new Date(Date.now())).toISOString().slice(0, 10)).replace(/-/g, '/');
         const id = Math.floor(Math.random() * Math.floor(Math.random() * Date.now()));
 
-        const text = "INSERT INTO usuarios (id, nombre, apellido, cedula, rol, usuario, contraseña) VALUES (?)";
-        const values = [id, nombre, apellido, parseInt(cedula), parseInt(rol), usuario, contraseña];
+        const text = "INSERT INTO casos (id, nombre, apellido, cedula, sexo, fecha_nacimiento, dir_residencia, res_lat, res_lng, dir_trabajo, tra_lat, tra_lng, resultado, fecha_examen, estado, fecha_modificacion) VALUES (?)";
+        const values = [id, nombre, apellido, parseInt(cedula), sexo, fecha_nacimiento, dir_residencia, parseFloat(res_lat), parseFloat(res_lng), dir_trabajo, parseFloat(tra_lat), parseFloat(tra_lng), resultado, fecha_examen, estado, current_date];
         
         db.query(text, [values], (err, info) => {
             if (err) {
                 console.log("No se pudo ejecutar el query.".red);
                 res.status(500).send({ message: "0" });
             } else{
+                console.log("Caso registrado correctamente.".gray);
                 res.status(200).send({ message: "1" });
             }            
         });
     },
 
     async getAll(req, res) {
-        const text = "SELECT * FROM usuarios";
+        const text = "SELECT * FROM casos";
         db.query(text, (err, info) => {
             if (err) {
                 console.log("No se pudo ejecutar el query.".red), err;
@@ -31,42 +34,34 @@ module.exports = {
         });
     },
 
-    async getByUsername(req, res) {
-        const username = req.params.username;
-        db.query('SELECT * FROM usuarios WHERE usuario = ?', [[username]], (err, info) => {
-            if (err) {
-                console.log("No se pudo ejecutar el query.".red), err;
-                return;
-            }
-            res.send(info);
-        });
-    }, 
-
     async update(req, res) {
         const id = parseInt(req.params.id);
-        const { nombre, apellido, cedula, rol, usuario, contraseña} = req.body;
 
-        const text = "UPDATE usuarios SET nombre = ?, apellido = ?, cedula = ?, rol = ?, contraseña = ? WHERE id = ?";
-        const values = [nombre, apellido, cedula, rol, contraseña, id];
+        const current_date = (new Date(Date.now())).toISOString().slice(0, 10).replace('-', '/');
+        const { dir_residencia, res_lat, res_lng, dir_trabajo, tra_lat, tra_lng, estado } = req.body;
+
+        const text = "UPDATE casos SET dir_residencia = ?, res_lat = ?, res_lng = ?, dir_trabajo = ?, tra_lat = ?, tra_lng = ?, estado = ?, fecha_modificacion = ? WHERE id = ?";
+        const values = [dir_residencia, parseFloat(res_lat), parseFloat(res_lng), dir_trabajo, parseFloat(tra_lat), parseFloat(tra_lng), estado, current_date, id];
+
         db.query(text, [values], (err, info) => {
             if (err) {s
                 console.log("No se pudo ejecutar el query.".red), err;
                 return;
             }
-            res.status(200).send({ message: "Usuario actualizados correctamente!" });
+            res.status(200).send({ message: "Caso actualizado correctamente!" });
         });
     },
 
     async remove(req, res) {
-        const usuario = req.params.usuario;
-        const text = 'DELETE FROM usuarios WHERE usuario = ?';
-        const values = [usuario];
+        const id = req.params.id;
+        const text = 'DELETE FROM casos WHERE id = ?';
+        const values = [id];
         db.query(text, [values], (err, info) => {
             if (err) {
                 console.log("No se pudo ejecutar el query.".red), err;
                 return;
             }
-            res.status(200).send({ message: 'Usuario deleted successfully!', usuario });
+            res.status(200).send({ message: 'Caso eliminado exitosamente!', id });
         });
     }
 
