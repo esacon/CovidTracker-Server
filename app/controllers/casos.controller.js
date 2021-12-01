@@ -1,7 +1,7 @@
 const db = require('../config/covid.db');
 
-module.exports = {    
-    
+module.exports = {
+
     async getAll(req, res) {
         const text = "SELECT * FROM casos";
         db.query(text, [[]], (err, info) => {
@@ -21,7 +21,7 @@ module.exports = {
 
             res.status(200).json({
                 casos: casos
-            });            
+            });
         });
     },
 
@@ -38,7 +38,6 @@ module.exports = {
                     ORDER BY C.fecha_modificacion ASC;`;
 
         const fechas = [];
-        const fechas_muertes = [];
         const total = [];
         const total_muertes = [];
 
@@ -55,7 +54,7 @@ module.exports = {
 
         text = `SELECT C.fecha_modificacion, COUNT(*) as cantidad_total
                 FROM (
-                    SELECT Min(id) as id, fecha_modificacion FROM casos WHERE  estado = 'Muerte' GROUP BY cedula
+                    SELECT Max(id) as id, fecha_modificacion FROM casos WHERE estado = 'Muerte' GROUP BY cedula
                 ) C
                 WHERE  C.fecha_modificacion BETWEEN '${fecha_inicio}' AND '${fecha_fin}'
                 GROUP BY C.fecha_modificacion
@@ -66,15 +65,26 @@ module.exports = {
                 console.log("No se pudo ejecutar el query.".red), err;
                 return;
             }
-            info.forEach(caso => {
-                fechas_muertes.push(caso.fecha_modificacion);
-                total_muertes.push(caso.cantidad_total);
+
+            const fechas_info = [];
+
+            info.forEach(element => {
+                fechas_info.push(element.fecha_modificacion);
+            });
+
+            let i = 0;
+            fechas.forEach(fecha => {
+                if (fechas_info.includes(fecha)) {
+                    total_muertes.push(info[i].cantidad_total);
+                    i++;
+                } else {
+                    total_muertes.push(0);
+                }
             });
 
             res.status(200).json({
                 fechas: fechas,
                 totales: total,
-                fechas_muertes: fechas_muertes,
                 totales_muertes: total_muertes
             });
         });
@@ -104,14 +114,14 @@ module.exports = {
                 FROM (
                     SELECT Max(id) as id, estado, fecha_modificacion FROM casos GROUP BY cedula
                 ) C;`;
-                
+
         const cantidad_infectados = [];
         const cantidad_muertes = [];
         const cantidad_curados = [];
         const cantidad_hospital = [];
         const cantidad_casa = [];
         const cantidad_uci = [];
-        
+
 
         db.query(text, [[]], (err, info) => {
             if (err) {
@@ -119,11 +129,11 @@ module.exports = {
                 return;
             }
             info.forEach(caso => {
-                if (caso.estado !== null){
-                    if (caso.estado !== 'Muerte' || caso.estado !== 'Curado' ){
+                if (caso.estado !== null) {
+                    if (caso.estado !== 'Muerte' || caso.estado !== 'Curado') {
                         cantidad_infectados.push(caso);
                     }
-                } 
+                }
                 if (caso.estado === 'Curado') {
                     cantidad_curados.push(caso);
                 } else if (caso.estado === 'Muerte') {
