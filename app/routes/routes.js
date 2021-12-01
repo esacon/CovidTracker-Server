@@ -28,5 +28,6 @@ router.get('/casos/info', CasosController.getAllInfo);
 router.get('/pacientes/:cedula/estados', PacienteController.getEstadosPaciente); 
 router.get('/pacientes/:cedula/direcciones', PacienteController.getDireccionesPaciente);
 router.get('/pacientes', PacienteController.getInfoPaciente);
+router.get('/pacientes/muertos', PacienteController.getMuertos);
 
 module.exports = router;

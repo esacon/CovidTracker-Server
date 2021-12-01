@@ -2,15 +2,18 @@ const db = require('../config/covid.db');
 
 module.exports = {
 
-    async getAll(req, res) {
-        const text = "SELECT * FROM casos";
+    async getMuertos(req, res) {
+        const text = "SELECT Max(id) as id, cedula FROM casos WHERE  estado = 'Muerte' GROUP BY cedula";
         db.query(text, [[]], (err, info) => {
             if (err) {
                 console.log("No se pudo ejecutar el query.".red), err;
                 return;
             }
-
-
+            const cedulas = [];
+            info.forEach(paciente => {
+                cedulas.push(paciente.cedula);
+            });
+            res.status(200).send(cedulas);
         });
     },
 
@@ -116,5 +119,4 @@ module.exports = {
             res.status(200).send(informacion);
         });
     }
-
 }
