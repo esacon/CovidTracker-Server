@@ -106,8 +106,11 @@ module.exports = {
                 console.log("No se pudo ejecutar el query.".red, err);
                 return;
             }
+
+            console.log(info)
             if (info.length > 0) {
                 cantidad_positivos = info[0].cantidad;
+            } else if (info.length > 1){                
                 cantidad_negativos = info[1].cantidad;
             }
         });
