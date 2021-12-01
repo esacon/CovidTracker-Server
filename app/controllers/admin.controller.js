@@ -43,14 +43,16 @@ module.exports = {
     }, 
 
     async update(req, res) {
-        const id = parseInt(req.params.id);
-        const { nombre, apellido, cedula, rol, usuario, contraseña} = req.body;
+        const id = parseInt(req.params.cedula);
+        const { rol, password } = req.body;
 
-        const text = "UPDATE usuarios SET nombre = ?, apellido = ?, cedula = ?, rol = ?, contraseña = ? WHERE id = ?";
-        const values = [nombre, apellido, cedula, rol, contraseña, id];
+        console.log(req.body, req.params.cedula);
+
+        const text = `UPDATE usuarios SET rol = ${rol}, contraseña = '${password}' WHERE cedula = ${id}`;
+        const values = [];
         db.query(text, [values], (err, info) => {
-            if (err) {s
-                console.log("No se pudo ejecutar el query.".red), err;
+            if (err) {
+                console.log("No se pudo ejecutar el query.".red, err);
                 return;
             }
             res.status(200).send({ message: "Usuario actualizados correctamente!" });
@@ -58,15 +60,15 @@ module.exports = {
     },
 
     async remove(req, res) {
-        const usuario = req.params.usuario;
-        const text = 'DELETE FROM usuarios WHERE usuario = ?';
-        const values = [usuario];
+        const id = parseInt(req.params.id);
+        const text = 'DELETE FROM casos WHERE id = ?';
+        const values = [id];
         db.query(text, [values], (err, info) => {
             if (err) {
                 console.log("No se pudo ejecutar el query.".red), err;
                 return;
             }
-            res.status(200).send({ message: 'Usuario deleted successfully!', usuario });
+            res.status(200).send({ message: 'Caso deleted successfully!', id });
         });
     }
 }

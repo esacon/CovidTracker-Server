@@ -106,8 +106,10 @@ module.exports = {
                 console.log("No se pudo ejecutar el query.".red, err);
                 return;
             }
-            cantidad_positivos = info[0].cantidad;
-            cantidad_negativos = info[1].cantidad;
+            if (info.length > 0) {
+                cantidad_positivos = info[0].cantidad;
+                cantidad_negativos = info[1].cantidad;
+            }
         });
 
         text = `SELECT estado

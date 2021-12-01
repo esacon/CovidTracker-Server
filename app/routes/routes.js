@@ -10,8 +10,8 @@ const CasosController = require('../controllers/casos.controller');
 router.post('/admin', AdminController.create);
 router.get('/admin', AdminController.getAll);
 router.get('/admin/:username', AdminController.getByUsername);
-router.put('/admin/:id', AdminController.update);
-router.delete('/admin/:usuario', AdminController.remove);
+router.put('/admin/:cedula', AdminController.update);
+router.delete('/admin/:id', AdminController.remove);
 
 // Ayudante.
 router.post('/ayudante', AyudanteController.create);
