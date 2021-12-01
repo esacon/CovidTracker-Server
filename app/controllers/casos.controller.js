@@ -25,7 +25,7 @@ module.exports = {
         });
     },
 
-    async getAll(req, res) {
+    async getAllCasos(req, res) {
 
         const { fecha_inicio, fecha_fin } = req.params;
 
@@ -70,7 +70,7 @@ module.exports = {
                 fechas_muertes.push(caso.fecha_modificacion);
                 total_muertes.push(caso.cantidad_total);
             });
-            
+
             res.status(200).json({
                 fechas: fechas,
                 totales: total,
@@ -79,5 +79,75 @@ module.exports = {
             });
         });
     },
+
+    async getAllInfo(req, res) {
+
+        let text = `SELECT resultado, Count(*) as cantidad
+                    FROM (
+                        SELECT Max(id) as id, resultado, fecha_modificacion FROM casos GROUP BY cedula
+                    ) C
+                    GROUP BY C.resultado;`;
+
+        let cantidad_positivos;
+        let cantidad_negativos;
+
+        db.query(text, [[]], (err, info) => {
+            if (err) {
+                console.log("No se pudo ejecutar el query.".red, err);
+                return;
+            }
+            cantidad_positivos = info[0].cantidad;
+            cantidad_negativos = info[1].cantidad;
+        });
+
+        text = `SELECT estado
+                FROM (
+                    SELECT Max(id) as id, estado, fecha_modificacion FROM casos GROUP BY cedula
+                ) C;`;
+                
+        const cantidad_infectados = [];
+        const cantidad_muertes = [];
+        const cantidad_curados = [];
+        const cantidad_hospital = [];
+        const cantidad_casa = [];
+        const cantidad_uci = [];
+        
+
+        db.query(text, [[]], (err, info) => {
+            if (err) {
+                console.log("No se pudo ejecutar el query.".red), err;
+                return;
+            }
+            info.forEach(caso => {
+                if (caso.estado !== null){
+                    if (caso.estado !== 'Muerte' || caso.estado !== 'Curado' ){
+                        cantidad_infectados.push(caso);
+                    }
+                } 
+                if (caso.estado === 'Curado') {
+                    cantidad_curados.push(caso);
+                } else if (caso.estado === 'Muerte') {
+                    cantidad_muertes.push(caso);
+                } else if (caso.estado === 'En tratamiento hospital') {
+                    cantidad_hospital.push(caso);
+                } else if (caso.estado === 'En tratamiento en casa') {
+                    cantidad_casa.push(caso);
+                } else if (caso.estado === 'En UCI') {
+                    cantidad_uci.push(caso);
+                }
+            });
+
+            res.status(200).json({
+                cantidad_positivos: cantidad_positivos,
+                cantidad_negativos: cantidad_negativos,
+                cantidad_infectados: cantidad_infectados.length,
+                cantidad_muertes: cantidad_muertes.length,
+                cantidad_curados: cantidad_curados.length,
+                cantidad_hospital: cantidad_hospital.length,
+                cantidad_casa: cantidad_casa.length,
+                cantidad_uci: cantidad_uci.length
+            });
+        });
+    }
 
 }

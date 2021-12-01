@@ -19,13 +19,14 @@ router.get('/ayudante', AyudanteController.getAll);
 router.put('/ayudante/:id', AyudanteController.update);
 router.delete('/ayudante/:id', AyudanteController.remove);
 
+// Consulta de casos
 router.get('/casos', CasosController.getAll);
+router.get('/casos&:fecha_inicio(*)&:fecha_fin(*)', CasosController.getAllCasos);
+router.get('/casos/info', CasosController.getAllInfo);  
+
+// Consulta de pacientes
 router.get('/pacientes/:cedula/estados', PacienteController.getEstadosPaciente); 
 router.get('/pacientes/:cedula/direcciones', PacienteController.getDireccionesPaciente);
-router.get('/pacientes', PacienteController.getInfoPaciente); 
-
-// Cédula
-router.get('/casos&:fecha_inicio(*)&:fecha_fin(*)', CasosController.getAll); // {registrados: [{fecha, cantidad_casos}], }
-router.get('/muertos&:fecha_inicio(*)&:fecha_fin(*)', CasosController.getAll); // {}
+router.get('/pacientes', PacienteController.getInfoPaciente);
 
 module.exports = router;
