@@ -19,12 +19,13 @@ router.get('/ayudante', AyudanteController.getAll);
 router.put('/ayudante/:id', AyudanteController.update);
 router.delete('/ayudante/:id', AyudanteController.remove);
 
+router.get('/casos', CasosController.getAll);
+router.get('/pacientes/:cedula/estados', PacienteController.getEstadosPaciente); 
+router.get('/pacientes/:cedula/direcciones', PacienteController.getDireccionesPaciente); // objeto {residencia: [parseFloat(lat), parseFloat(longitud)], trabajo: [parseFloat(lat), parseFloat(longitud)]} valor unico
+router.get('/pacientes', PacienteController.getInfoPaciente); // [{residencia: [parseFloat(lat), parseFloat(longitud)], color}]
+
 // Cédula
-router.get('/paciente/:id_paciente/estados', AyudanteController.getAll);  // fecha_actualizacion, estado [{}]
-router.get('/paciente/:id_paciente/direcciones', AyudanteController.getAll); // objeto {residencia: [parseFloat(lat), parseFloat(longitud)], trabajo: [parseFloat(lat), parseFloat(longitud)]} valor unico
-router.get('/paciente', PacienteController.getAll); // [{residencia: [parseFloat(lat), parseFloat(longitud)], color}]
-router.get('/casos', CasosController.getAll)
-router.get('/casos/:fecha_inicio/:fecha_fin', AyudanteController.getAll) // {registrados: [{fecha, cantidad_casos}], }
-router.get('/muertos/:fecha_inicio/:fecha_fin', AyudanteController.getAll) // {}
+router.get('/casos/:fecha_inicio/:fecha_fin', CasosController.getAll) // {registrados: [{fecha, cantidad_casos}], }
+router.get('/muertos/:fecha_inicio/:fecha_fin', CasosController.getAll) // {}
 
 module.exports = router;

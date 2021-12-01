@@ -69,5 +69,4 @@ module.exports = {
             res.status(200).send({ message: 'Usuario deleted successfully!', usuario });
         });
     }
-
 }
