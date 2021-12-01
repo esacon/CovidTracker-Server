@@ -3,7 +3,7 @@ const db = require('../config/covid.db');
 module.exports = {
 
     async getMuertos(req, res) {
-        const text = "SELECT Max(id) as id, cedula FROM casos WHERE  estado = 'Muerte' GROUP BY cedula";
+        const text = "SELECT cedula FROM casos WHERE estado = 'Muerte'";
         db.query(text, [[]], (err, info) => {
             if (err) {
                 console.log("No se pudo ejecutar el query.".red), err;
