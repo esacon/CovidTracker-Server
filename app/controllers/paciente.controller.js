@@ -9,11 +9,7 @@ module.exports = {
                 console.log("No se pudo ejecutar el query.".red), err;
                 return;
             }
-            const cedulas = [];
-            info.forEach(paciente => {
-                cedulas.push(paciente.cedula);
-            });
-            res.status(200).send(cedulas);
+            res.status(200).send(info);
         });
     },
 
