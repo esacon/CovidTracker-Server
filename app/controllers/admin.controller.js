@@ -65,7 +65,7 @@ module.exports = {
         const values = [id];
         db.query(text, [values], (err, info) => {
             if (err) {
-                console.log("No se pudo ejecutar el query.".red), err;
+                console.log("No se pudo ejecutar el query.".red, err);
                 return;
             }
             res.status(200).send({ message: 'Caso deleted successfully!', id });
