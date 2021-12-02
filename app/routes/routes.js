@@ -9,6 +9,7 @@ const CasosController = require('../controllers/casos.controller');
 // Administrador
 router.post('/admin', AdminController.create);
 router.get('/admin', AdminController.getAll);
+router.get('/admin/:username', AdminController.getByUsername);
 router.put('/admin/:cedula', AdminController.update);
 router.delete('/admin/:id', AdminController.remove);
 
