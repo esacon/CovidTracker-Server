@@ -109,16 +109,13 @@ module.exports = {
 
             console.log(info)
             if (info.length > 0) {
-                cantidad_positivos = info[0].cantidad;
-            } else if (info.length > 1){                
-                cantidad_negativos = info[1].cantidad;
+                cantidad_negativos = info[0].cantidad;            
+                cantidad_positivos = info[1].cantidad;
             }
+            console.log(cantidad_positivos, cantidad_negativos)
         });
 
-        text = `SELECT estado
-                FROM (
-                    SELECT Max(id) as id, estado, fecha_modificacion FROM casos GROUP BY cedula
-                ) C;`;
+        text = `SELECT estado FROM casos WHERE id in (SELECT MAX(id) FROM casos GROUP BY cedula)`;
 
         const cantidad_infectados = [];
         const cantidad_muertes = [];
