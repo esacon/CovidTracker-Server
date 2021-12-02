@@ -5,10 +5,8 @@ module.exports = {
     async create(req, res) {
         const { nombre, apellido, cedula, rol, usuario, contraseña } = req.body;
 
-        const id = Math.floor(Math.random() * Math.floor(Math.random() * Date.now()));
-
         const text = "INSERT INTO usuarios (id, nombre, apellido, cedula, rol, usuario, contraseña) VALUES (?)";
-        const values = [id, nombre, apellido, parseInt(cedula), parseInt(rol), usuario, contraseña];
+        const values = [null, nombre, apellido, parseInt(cedula), parseInt(rol), usuario, contraseña];
         
         db.query(text, [values], (err, info) => {
             if (err) {
@@ -60,8 +58,9 @@ module.exports = {
     },
 
     async remove(req, res) {
+        console.log(req.params)
         const id = parseInt(req.params.id);
-        const text = 'DELETE FROM casos WHERE id = ?';
+        const text = 'DELETE FROM usuarios WHERE cedula = ?';
         const values = [id];
         db.query(text, [values], (err, info) => {
             if (err) {

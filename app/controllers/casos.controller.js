@@ -31,7 +31,7 @@ module.exports = {
 
         let text = `SELECT C.fecha_modificacion, COUNT(*) as cantidad_total
                     FROM (
-                        SELECT Min(id) as id, estado, fecha_modificacion FROM casos GROUP BY cedula
+                        SELECT Max(id) as id, estado, fecha_modificacion FROM casos GROUP BY cedula
                     ) C
                     WHERE  C.fecha_modificacion BETWEEN '${fecha_inicio}' AND '${fecha_fin}'
                     GROUP BY C.fecha_modificacion

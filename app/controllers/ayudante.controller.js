@@ -6,11 +6,12 @@ module.exports = {
         console.log(req.body)
         const { nombre, apellido, cedula, sexo, fecha_nacimiento, dir_residencia, res_lat, res_lng, dir_trabajo, tra_lat, tra_lng, resultado, fecha_examen, estado } = req.body;
 
+        console.log(cedula, parseInt(cedula))
+
         const current_date = String((new Date(Date.now())).toISOString().slice(0, 10)).replace(/-/g, '/');
-        const id = Date.now();
 
         const text = "INSERT INTO casos (id, nombre, apellido, cedula, sexo, fecha_nacimiento, dir_residencia, res_lat, res_lng, dir_trabajo, tra_lat, tra_lng, resultado, fecha_examen, estado, fecha_modificacion) VALUES (?)";
-        const values = [id, nombre, apellido, parseInt(cedula), sexo, fecha_nacimiento, dir_residencia, parseFloat(res_lat), parseFloat(res_lng), dir_trabajo, parseFloat(tra_lat), parseFloat(tra_lng), resultado, fecha_examen, estado, current_date];
+        const values = [null, nombre, apellido, parseInt(cedula), sexo, fecha_nacimiento, dir_residencia, parseFloat(res_lat), parseFloat(res_lng), dir_trabajo, parseFloat(tra_lat), parseFloat(tra_lng), resultado, fecha_examen, estado, current_date];
         
         db.query(text, [values], (err, info) => {
             if (err) {
@@ -53,14 +54,16 @@ module.exports = {
     },
 
     async remove(req, res) {
-        const id = req.params.id;
-        const text = 'DELETE FROM casos WHERE id = ?';
+        const id = parseInt(req.params.id);
+        console.log(req)
+        const text = 'DELETE FROM usuarios WHERE id = ?';
         const values = [id];
         db.query(text, [values], (err, info) => {
             if (err) {
-                console.log("No se pudo ejecutar el query.".red), err;
+                console.log("No se pudo ejecutar el query.".red, err);
                 return;
             }
+            console.log('Usuario eliminado.')
             res.status(200).send({ message: 'Caso eliminado exitosamente!', id });
         });
     }
