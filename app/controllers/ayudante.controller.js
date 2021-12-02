@@ -54,17 +54,17 @@ module.exports = {
     },
 
     async remove(req, res) {
-        const id = parseInt(req.params.id);
+        const cedula = parseInt(req.params.cedula);
         console.log(req)
-        const text = 'DELETE FROM usuarios WHERE id = ?';
-        const values = [id];
+        const text = 'DELETE FROM usuarios WHERE cedula = ?';
+        const values = [cedula];
         db.query(text, [values], (err, info) => {
             if (err) {
                 console.log("No se pudo ejecutar el query.".red, err);
                 return;
             }
             console.log('Usuario eliminado.')
-            res.status(200).send({ message: 'Caso eliminado exitosamente!', id });
+            res.status(200).send({ message: 'Caso eliminado exitosamente!', cedula });
         });
     }
 

@@ -17,7 +17,7 @@ router.delete('/admin/:id', AdminController.remove);
 router.post('/ayudante', AyudanteController.create);
 router.get('/ayudante', AyudanteController.getAll);
 router.put('/ayudante/:id', AyudanteController.update);
-router.delete('/ayudante/:id', AyudanteController.remove);
+router.delete('/ayudante/:cedula', AyudanteController.remove);
 
 // Consulta de casos
 router.get('/casos', CasosController.getAll);
