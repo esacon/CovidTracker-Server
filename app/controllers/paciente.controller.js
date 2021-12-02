@@ -48,7 +48,7 @@ module.exports = {
     },
 
     async getEstadosPaciente(req, res) {
-        const text = 'SELECT cedula, fecha_modificacion, estado FROM casos WHERE cedula = ? ORDER BY fecha_modificacion DESC';
+        const text = 'SELECT cedula, fecha_modificacion, estado FROM casos WHERE cedula = ? ORDER BY id DESC';
         db.query(text, [[req.params.cedula]], (err, info) => {
             if (err) {
                 console.log("No se pudo ejecutar el query.".red), err;
